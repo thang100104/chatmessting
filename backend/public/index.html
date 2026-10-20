@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Simple Chat System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="page">
+    <section id="authView" class="card auth-card">
+      <h1>Simple Chat</h1>
+      <p class="muted">Docker + PostgreSQL + Nginx + Monitoring + Logging</p>
+
+      <div class="tabs">
+        <button id="loginTab" class="active">Đăng nhập</button>
+        <button id="registerTab">Đăng ký</button>
+      </div>
+
+      <form id="authForm">
+        <input id="username" placeholder="Tên đăng nhập" required>
+        <input id="password" type="password" placeholder="Mật khẩu" required>
+        <button type="submit" id="submitBtn">Đăng nhập</button>
+      </form>
+      <p id="authMsg"></p>
+    </section>
+
+    <section id="chatView" class="chat-layout hidden">
+      <aside class="sidebar">
+        <div class="sidebar-top">
+          <div>
+            <strong id="meName"></strong>
+            <div class="muted small">Đang đăng nhập</div>
+          </div>
+          <button id="logoutBtn" class="secondary">Đăng xuất</button>
+        </div>
+        <h3>Người dùng</h3>
+        <div id="usersList"></div>
+      </aside>
+
+      <main class="chat-panel">
+        <div class="chat-header">
+          <h2 id="chatTitle">Chọn một người để bắt đầu chat</h2>
+        </div>
+        <div id="messages" class="messages"></div>
+        <form id="messageForm" class="composer">
+          <input id="messageInput" placeholder="Nhập tin nhắn..." autocomplete="off" disabled>
+          <button id="sendBtn" disabled>Gửi</button>
+        </form>
+      </main>
+    </section>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
