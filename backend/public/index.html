@@ -2,56 +2,281 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="Simple Chat System - Docker, PostgreSQL, Nginx, Prometheus, Grafana, Loki"
+  >
+
   <title>Simple Chat System</title>
+
   <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
+
   <div class="page">
+
+    <!-- =========================
+         ĐĂNG NHẬP / ĐĂNG KÝ
+    ========================== -->
     <section id="authView" class="card auth-card">
-      <h1>Simple Chat</h1>
-      <p class="muted">Docker + PostgreSQL + Nginx + Monitoring + Logging</p>
+
+      <div class="auth-header">
+        <div class="brand-icon">
+          💬
+        </div>
+
+        <h1>Simple Chat</h1>
+
+        <p class="muted">
+          Docker • PostgreSQL • Nginx • Monitoring • Logging
+        </p>
+      </div>
 
       <div class="tabs">
-        <button id="loginTab" class="active">Đăng nhập</button>
-        <button id="registerTab">Đăng ký</button>
+        <button
+          type="button"
+          id="loginTab"
+          class="active"
+        >
+          Đăng nhập
+        </button>
+
+        <button
+          type="button"
+          id="registerTab"
+        >
+          Đăng ký
+        </button>
       </div>
 
       <form id="authForm">
-        <input id="username" placeholder="Tên đăng nhập" required>
-        <input id="password" type="password" placeholder="Mật khẩu" required>
-        <button type="submit" id="submitBtn">Đăng nhập</button>
+
+        <div class="form-group">
+          <label for="username">
+            Tên đăng nhập
+          </label>
+
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Nhập tên đăng nhập"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="password">
+            Mật khẩu
+          </label>
+
+          <input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Nhập mật khẩu"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          id="submitBtn"
+          class="auth-submit"
+        >
+          Đăng nhập
+        </button>
+
       </form>
-      <p id="authMsg"></p>
+
+      <p id="authMsg" class="auth-message"></p>
+
+      <div class="auth-footer">
+        <span>Hệ thống Chat triển khai bằng Docker Compose</span>
+      </div>
+
     </section>
 
-    <section id="chatView" class="chat-layout hidden">
+
+    <!-- =========================
+         GIAO DIỆN CHAT
+    ========================== -->
+    <section
+      id="chatView"
+      class="chat-layout hidden"
+    >
+
+      <!-- SIDEBAR -->
       <aside class="sidebar">
+
         <div class="sidebar-top">
-          <div>
-            <strong id="meName"></strong>
-            <div class="muted small">Đang đăng nhập</div>
+
+          <div class="current-user">
+
+            <div class="avatar">
+              <span id="avatarText">U</span>
+            </div>
+
+            <div class="current-user-info">
+              <strong id="meName"></strong>
+
+              <div class="online-status">
+                <span class="online-dot"></span>
+                <span>Đang đăng nhập</span>
+              </div>
+            </div>
+
           </div>
-          <button id="logoutBtn" class="secondary">Đăng xuất</button>
+
+          <button
+            id="logoutBtn"
+            class="secondary logout-btn"
+            type="button"
+          >
+            Đăng xuất
+          </button>
+
         </div>
-        <h3>Người dùng</h3>
-        <div id="usersList"></div>
+
+
+        <div class="sidebar-section-title">
+          <div>
+            <h3>Người dùng</h3>
+            <span class="muted small">
+              Chọn người để bắt đầu trò chuyện
+            </span>
+          </div>
+        </div>
+
+
+        <div
+          id="usersList"
+          class="users-list"
+        >
+        </div>
+
+
+        <div class="sidebar-footer">
+          <span class="system-dot"></span>
+
+          <span>
+            Chat realtime đang hoạt động
+          </span>
+        </div>
+
       </aside>
 
+
+      <!-- CHAT PANEL -->
       <main class="chat-panel">
+
+        <!-- HEADER -->
         <div class="chat-header">
-          <h2 id="chatTitle">Chọn một người để bắt đầu chat</h2>
+
+          <div class="chat-header-left">
+
+            <div class="chat-user-avatar">
+              💬
+            </div>
+
+            <div>
+              <h2 id="chatTitle">
+                Chọn một người để bắt đầu chat
+              </h2>
+
+              <p class="chat-subtitle">
+                Tin nhắn realtime • Lưu lịch sử PostgreSQL
+              </p>
+            </div>
+
+          </div>
+
+          <div class="chat-header-status">
+            <span class="online-dot"></span>
+            <span>Online</span>
+          </div>
+
         </div>
-        <div id="messages" class="messages"></div>
-        <form id="messageForm" class="composer">
-          <input id="messageInput" placeholder="Nhập tin nhắn..." autocomplete="off" disabled>
-          <button id="sendBtn" disabled>Gửi</button>
+
+
+        <!-- MESSAGES -->
+        <div
+          id="messages"
+          class="messages"
+        >
+
+          <div
+            id="emptyChatState"
+            class="empty-chat"
+          >
+            <div class="empty-chat-icon">
+              💬
+            </div>
+
+            <h3>
+              Chưa chọn cuộc trò chuyện
+            </h3>
+
+            <p>
+              Chọn một người dùng ở bên trái để bắt đầu nhắn tin.
+            </p>
+          </div>
+
+        </div>
+
+
+        <!-- FORM GỬI TIN NHẮN -->
+        <form
+          id="messageForm"
+          class="composer"
+        >
+
+          <div class="composer-input-wrapper">
+
+            <input
+              id="messageInput"
+              type="text"
+              placeholder="Nhập tin nhắn..."
+              autocomplete="off"
+              maxlength="2000"
+              disabled
+            >
+
+          </div>
+
+          <button
+            id="sendBtn"
+            type="submit"
+            disabled
+          >
+            <span>Gửi</span>
+
+            <span class="send-icon">
+              ➤
+            </span>
+          </button>
+
         </form>
+
       </main>
+
     </section>
+
   </div>
 
+
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
+
   <script src="/socket.io/socket.io.js"></script>
+
   <script src="/js/app.js"></script>
+
 </body>
 </html>
